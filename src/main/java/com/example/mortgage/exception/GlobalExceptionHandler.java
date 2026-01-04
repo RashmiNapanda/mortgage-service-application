@@ -29,6 +29,14 @@ public class GlobalExceptionHandler {
                 );
             }
 
+            // Fallback for unexpected errors
+            default -> {
+                log.error("Unexpected error occurred", ex);
+                yield buildErrorResponse(
+                        HttpStatus.INTERNAL_SERVER_ERROR,
+                        "Internal server error"
+                );
+            }
         };
     }
 
