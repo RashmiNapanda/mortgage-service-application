@@ -23,14 +23,18 @@ public class MortgageController {
     public MortgageController(MortgageService service) {
         this.service = service;
     }
-
+    /**
+     * Returns the list of available mortgage interest rates.
+     */
     @Operation(summary = "Get current mortgage interest rates")
     @GetMapping("/interest-rates")
     @ResponseStatus(HttpStatus.OK)
     public List<InterestRate> getInterestRates() {
         return service.getInterestRates();
     }
-
+    /**
+     * Checks mortgage feasibility and calculates monthly cost.
+     */
     @Operation(summary = "Check mortgage feasibility and monthly cost")
     @PostMapping("/mortgage-check")
     @ResponseStatus(HttpStatus.CREATED)

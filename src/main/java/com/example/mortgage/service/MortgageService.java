@@ -23,12 +23,18 @@ public class MortgageService {
             new InterestRate(20, BigDecimal.valueOf(3.5), Instant.now()),
             new InterestRate(30, BigDecimal.valueOf(4.0), Instant.now())
     );
+    /**
+     * Returns available mortgage interest rates.
+     */
     @Cacheable("interestRates")
     public List<InterestRate> getInterestRates() {
         log.info("Fetching interest rates");
         return interestRates;
     }
 
+    /**
+     * Evaluates mortgage feasibility and calculates monthly cost.
+     */
     public MortgageCheckResponse checkMortgage(MortgageCheckRequest request) {
         log.info("Running mortgage check for maturityPeriod={}", request.maturityPeriod());
 
