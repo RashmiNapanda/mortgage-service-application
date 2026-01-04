@@ -92,7 +92,15 @@ Response example:
   - loanValue ≤ homeValue
 - Monthly cost is calculated using the interest rate associated with the selected maturity period.
 - Monthly cost represents an interest-only calculation as required by the assignment.
+- Mortgage Calcultion formula
+  M = P × ( r × (1 + r)^n ) / ( (1 + r)^n − 1 )
+  
+  M = Monthly mortgage payment
+  P = Principal (loan amount)
+  r = Monthly interest rate (annualRate / 12 / 100)
+  n = Total number of payments (years × 12)
 
+  factor = (1 + r)^n ##represents the compound interest growth over the entire loan duration
 ---
 
 ## Swagger
