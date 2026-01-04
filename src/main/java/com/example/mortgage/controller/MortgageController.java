@@ -23,5 +23,8 @@ public class MortgageController {
         return service.getInterestRates();
     }
 
-
+    @PostMapping("/mortgage-check")
+    public MortgageCheckResponse check(@Valid @RequestBody MortgageCheckRequest request) {
+        return service.checkMortgage(request);
+    }
 }

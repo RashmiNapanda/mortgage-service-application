@@ -28,5 +28,54 @@ public class MortgageService {
         return interestRates;
     }
 
+    public MortgageCheckResponse checkMortgage(MortgageCheckRequest request) {
+        log.info("Running mortgage check for maturityPeriod={}", request.maturityPeriod());
 
+        boolean feasible = request.loanValue().compareTo(request.income().multiply(BigDecimal.valueOf(4))) <= 0
+                && request.loanValue().compareTo(request.homeValue()) <= 0;
+
+        if (!feasible) {
+            log.warn("Mortgage not feasible for provided input");
+        }
+
+        InterestRate rate = interestRates.stream()
+                .filter(r -> r.maturityPeriod() == request.maturityPeriod())
+                .findFirst()
+                .orElseThrow(() -> new NotFoundException("Interest rate not found"));
+
+        /*BigDecimal monthlyRate = rate.interestRate()
+                .divide(BigDecimal.valueOf(100), 6, RoundingMode.HALF_UP)
+                .divide(BigDecimal.valueOf(12), 6, RoundingMode.HALF_UP);*/
+
+        //BigDecimal monthlyCost = request.loanValue().multiply(monthlyRate).setScale(2, RoundingMode.HALF_UP);
+
+        BigDecimal monthlyCost = calculateMonthlyMortgage(
+                request.loanValue(),
+                rate.interestRate(),
+                request.maturityPeriod()
+        );
+
+        log.info("Mortgage check completed. feasible={}", feasible);
+        return new MortgageCheckResponse(feasible, monthlyCost);
+    }
+
+    private BigDecimal calculateMonthlyMortgage(
+            BigDecimal loanValue,
+            BigDecimal annualInterestRate,
+            int maturityPeriodYears) {
+
+        int months = maturityPeriodYears * 12;
+
+        BigDecimal monthlyRate = annualInterestRate
+                .divide(BigDecimal.valueOf(100), 10, RoundingMode.HALF_UP)
+                .divide(BigDecimal.valueOf(12), 10, RoundingMode.HALF_UP);
+
+        BigDecimal factor = BigDecimal.ONE.add(monthlyRate)
+                .pow(months, MathContext.DECIMAL128);
+
+        return loanValue
+                .multiply(monthlyRate)
+                .multiply(factor)
+                .divide(factor.subtract(BigDecimal.ONE), 2, RoundingMode.HALF_UP);
+    }
 }
