@@ -1,0 +1,11 @@
+
+spring:
+  application:
+    name: mortgage-backend
+  cache:
+    type: simple
+
+logging:
+  level:
+    root: INFO
+    com.example.mortgage: INFO
