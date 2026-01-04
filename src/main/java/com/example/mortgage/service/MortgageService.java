@@ -22,7 +22,7 @@ public class MortgageService {
             new InterestRate(20, BigDecimal.valueOf(3.5), Instant.now()),
             new InterestRate(30, BigDecimal.valueOf(4.0), Instant.now())
     );
-
+    @Cacheable("interestRates")
     public List<InterestRate> getInterestRates() {
         log.info("Fetching interest rates");
         return interestRates;
