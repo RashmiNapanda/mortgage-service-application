@@ -4,8 +4,14 @@ import com.example.mortgage.dto.MortgageCheckRequest;
 import com.example.mortgage.dto.MortgageCheckResponse;
 import com.example.mortgage.model.InterestRate;
 import com.example.mortgage.service.MortgageService;
+
+import io.swagger.v3.oas.annotations.Operation;
+
 import jakarta.validation.Valid;
+
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+
 import java.util.List;
 
 @RestController
@@ -28,7 +34,8 @@ public class MortgageController {
     @Operation(summary = "Check mortgage feasibility and monthly cost")
     @PostMapping("/mortgage-check")
     @ResponseStatus(HttpStatus.CREATED)
-    public MortgageCheckResponse check(@Valid @RequestBody MortgageCheckRequest request) {
+    public MortgageCheckResponse check(
+            @Valid @RequestBody MortgageCheckRequest request) {
         return service.checkMortgage(request);
     }
 }

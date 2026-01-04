@@ -5,6 +5,7 @@ import com.example.mortgage.dto.MortgageCheckResponse;
 import com.example.mortgage.exception.NotFoundException;
 import com.example.mortgage.model.InterestRate;
 import org.springframework.stereotype.Service;
+import org.springframework.cache.annotation.Cacheable;
 import java.math.BigDecimal;
 import java.math.MathContext;
 import java.math.RoundingMode;
@@ -43,11 +44,6 @@ public class MortgageService {
                 .findFirst()
                 .orElseThrow(() -> new NotFoundException("Interest rate not found"));
 
-        /*BigDecimal monthlyRate = rate.interestRate()
-                .divide(BigDecimal.valueOf(100), 6, RoundingMode.HALF_UP)
-                .divide(BigDecimal.valueOf(12), 6, RoundingMode.HALF_UP);*/
-
-        //BigDecimal monthlyCost = request.loanValue().multiply(monthlyRate).setScale(2, RoundingMode.HALF_UP);
 
         BigDecimal monthlyCost = calculateMonthlyMortgage(
                 request.loanValue(),
